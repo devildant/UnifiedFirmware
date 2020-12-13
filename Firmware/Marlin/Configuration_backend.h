@@ -65,7 +65,7 @@
 
 // PID Settings
 #define PIDTEMP
-#define BANG_MAX 255
+#define BANG_MAX 250
 #define PID_MAX BANG_MAX
 #define PID_K1 0.95
 
@@ -83,7 +83,7 @@
 
 #if ENABLED(ENABLE_PIDBED) // PID Bed is not needed. Bang Bang loop is set to 500ms
   #define PIDTEMPBED
-  #define MAX_BED_POWER 255
+  #define MAX_BED_POWER 100
   #if ENABLED(PIDTEMPBED)
     #ifndef DEFAULT_bedKp
       #define DEFAULT_bedKp 10.00 // Define Marlin default bed PID if no machine specific PID is defined.
@@ -362,12 +362,13 @@
 #endif
 
 #define Z_PROBE_SPEED_FAST HOMING_FEEDRATE_Z
-#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
+//#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
+#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST) 
 
 #if ENABLED(BLTOUCH)
-  #define Z_CLEARANCE_DEPLOY_PROBE   12
-  #define Z_CLEARANCE_BETWEEN_PROBES 8
-  #define Z_CLEARANCE_MULTI_PROBE    8
+  #define Z_CLEARANCE_DEPLOY_PROBE   6
+  #define Z_CLEARANCE_BETWEEN_PROBES 5
+  #define Z_CLEARANCE_MULTI_PROBE    6
   #define ENDSTOPPULLUP_ZMIN
   #define ENDSTOPPULLUP_ZMIN_PROBE
 #elif ENABLED(EZABL_SUPERFASTPROBE) && ENABLED(ABL_ENABLE) && DISABLED(BLTOUCH)
@@ -443,7 +444,7 @@
  * LCD General Settings
  */
 
-#define LCD_LANGUAGE en
+#define LCD_LANGUAGE fr
 #define DISPLAY_CHARSET_HD44780 JAPANESE
 #define LCD_INFO_SCREEN_STYLE 0
 #define DISABLE_REDUCED_ACCURACY_WARNING

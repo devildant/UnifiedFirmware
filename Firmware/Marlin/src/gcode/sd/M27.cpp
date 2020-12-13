@@ -37,6 +37,10 @@ void GcodeSuite::M27() {
     SERIAL_ECHOPGM("Current file: ");
     card.printFilename();
   }
+  if (parser.seen('F')) {
+    card.report_status(true);
+    return;
+  }
 
   #if ENABLED(AUTO_REPORT_SD_STATUS)
     else if (parser.seenval('S'))

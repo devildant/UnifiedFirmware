@@ -41,6 +41,16 @@ void GcodeSuite::G92() {
     constexpr uint8_t subcode_G92 = 0;
   #endif
 
+   if (parser.boolval('H')) {
+    #if !IS_SCARA && !ENABLED(DELTA)
+      // For cartesian/core machines,
+      // set the axis to its home position
+      set_axis_is_at_home(Z_AXIS);
+      current_position[Z_AXIS] = parser.floatval('H');
+      sync_plan_position();
+      destination[Z_AXIS] = current_position[Z_AXIS];
+    #endif
+  }
   switch (subcode_G92) {
     default: break;
     #if ENABLED(CNC_COORDINATE_SYSTEMS)

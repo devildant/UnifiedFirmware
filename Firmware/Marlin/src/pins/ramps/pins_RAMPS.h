@@ -150,18 +150,19 @@
   #define E0_CS_PIN                           42
 #endif
 
-#define E1_STEP_PIN                           36
-#define E1_DIR_PIN                            34
-#define E1_ENABLE_PIN                         30
-#ifndef E1_CS_PIN
-  #define E1_CS_PIN                           44
+#define Z2_STEP_PIN                           36
+#define Z2_DIR_PIN                            34
+#define Z2_ENABLE_PIN                         30
+#ifndef Z2_CS_PIN
+  #define Z2_CS_PIN                           44
 #endif
 
 //
 // Temperature Sensors
 //
 #ifndef TEMP_0_PIN
-  #define TEMP_0_PIN                          13  // Analog Input
+  //#define TEMP_0_PIN                          13  // Analog Input
+  #define TEMP_0_PIN                          12  // Analog Input
 #endif
 #ifndef TEMP_1_PIN
   #define TEMP_1_PIN                          15  // Analog Input

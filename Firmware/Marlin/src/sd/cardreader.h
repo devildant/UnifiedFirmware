@@ -125,7 +125,7 @@ public:
   static void printFilename();
   static void startFileprint();
   static void endFilePrint(TERN_(SD_RESORT, const bool re_sort=false));
-  static void report_status();
+  static void report_status(bool forced=false);
   static inline void pauseSDPrint() { flag.sdprinting = false; }
   static inline bool isPaused() { return isFileOpen() && !flag.sdprinting; }
   static inline bool isPrinting() { return flag.sdprinting; }
