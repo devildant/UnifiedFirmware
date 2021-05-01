@@ -567,6 +567,8 @@
   #include "stm32f1/pins_CREALITY_V4.h"         // STM32F1                                env:STM32F103RET6_creality
 #elif MB(CREALITY_V427)
   #include "stm32f1/pins_CREALITY_V427.h"       // STM32F1                                env:STM32F103RET6_creality
+#elif MB(CREALITY_V431)
+  #include "stm32f1/pins_CREALITY_V431.h"       // STM32F1                                env:STM32F103RET6_creality
 #elif MB(TRIGORILLA_PRO)
   #include "stm32f1/pins_TRIGORILLA_PRO.h"      // STM32F1                                env:trigorilla_pro
 #elif MB(FLY_MINI)
@@ -744,7 +746,7 @@
   #elif MB(RUMBA32_AUS3D)
     #error "BOARD_RUMBA32_AUS3D is now BOARD_RUMBA32_V1_0. Please update your configuration."
   #else
-    #error "Unknown MOTHERBOARD value set in Configuration.h"
+    #error "NO PRINTER SELECTED. Uncomment your printer line and try again."
   #endif
 
   #undef BOARD_MKS_13

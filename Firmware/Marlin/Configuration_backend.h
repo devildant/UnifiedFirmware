@@ -6,7 +6,19 @@
 //======================= DO NOT MODIFY THIS FILE ===========================
 //===========================================================================
 
-#define UNIFIED_VERSION "TH3D UFW 2.13"
+#define UNIFIED_VERSION "TH3D UFW 2.27"
+
+/**
+ * TH3D Sanity Checks
+ */
+
+#if ENABLED(ABL_ENABLE) && ENABLED(S_CURVE_ACCELERATION)
+  #error "S_CURVE_ACCELERATION is not compatible with ABL systems. Disable this and re-compile."
+#endif
+
+#if ENABLED(BLTOUCH) && DISABLED(CUSTOM_PROBE)
+  #error "You must uncomment the CUSTOM_PROBE option in the EZABL probe mount section and then enter your mount offsets into the Custom Probe section."
+#endif
 
 /**
  * Temp Settings
@@ -86,9 +98,9 @@
   #define MAX_BED_POWER 100
   #if ENABLED(PIDTEMPBED)
     #ifndef DEFAULT_bedKp
-      #define DEFAULT_bedKp 10.00 // Define Marlin default bed PID if no machine specific PID is defined.
-      #define DEFAULT_bedKi .023
-      #define DEFAULT_bedKd 305.4
+      #define  DEFAULT_bedKp 113.36
+      #define  DEFAULT_bedKi 21.62
+      #define  DEFAULT_bedKd 148.59
     #endif
   #endif
 #endif
@@ -109,6 +121,50 @@
 #if ENABLED(CUSTOM_PROBE)
   #define ABL_ENABLE
 #endif
+#if ENABLED(ENDER6_OEM)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -40, -14, 0 }
+#endif
+#if ENABLED(ENDER3_MAX_OEM)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { 57, -9, 0 }
+#endif
+#if ENABLED(KP3S_OEM_MOUNT)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { 37, -3, 0 }
+#endif
+#if ENABLED(ANET_A2_OEM_MOUNT)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -33, -22, 0 }
+#endif
+#if ENABLED(ANET_A6_OEM_MOUNT)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -1, -54, 0 }
+#endif
+#if ENABLED(ANET_A8_OEM_MOUNT)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -26, -40, 0 }
+#endif
+#if ENABLED(ANET_A8_PLUS_OEM_MOUNT)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -24, -45, 0 }
+#endif
+#if ENABLED(ANET_E10_OEM_MOUNT)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -38, -12, 0 }
+#endif
+#if ENABLED(ANET_E12_OEM_MOUNT)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -38, -12, 0 }
+#endif
+#if ENABLED(ANET_E16_OEM_MOUNT)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -38, -12, 0 }
+#endif
+#if ENABLED(SUNLU_S8_5015_EZABL)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -47, -11, 0 }
+#endif
 #if ENABLED(AC_MEGA_ZERO_OEM)
   #define ABL_ENABLE
   #define NOZZLE_TO_PROBE_OFFSET { -52, -19, 0 }
@@ -121,7 +177,27 @@
   #define NOZZLE_TO_PROBE_OFFSET { -46, -15, 0 }
   #define ABL_ENABLE
 #endif
-#if ENABLED(ENDER3_OEM) || ENABLED(ENDER5_OEM) || ENABLED(CR10_OEM) || ENABLED(CR10S_OEM) || ENABLED(ENDER5_PLUS_OEM) || ENABLED(CR20_OEM)
+#if ENABLED(ENDER3_OEM)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -44, -10, 0 }
+#endif
+#if ENABLED(ENDER5_OEM)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -44, -10, 0 }
+#endif
+#if ENABLED(CR10_OEM)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -44, -10, 0 }
+#endif
+#if ENABLED(CR10S_OEM)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -44, -10, 0 }
+#endif
+#if ENABLED(ENDER5_PLUS_OEM)
+  #define ABL_ENABLE
+  #define NOZZLE_TO_PROBE_OFFSET { -44, -10, 0 }
+#endif
+#if ENABLED(CR20_OEM)
   #define ABL_ENABLE
   #define NOZZLE_TO_PROBE_OFFSET { -44, -10, 0 }
 #endif
@@ -133,11 +209,19 @@
   #define NOZZLE_TO_PROBE_OFFSET { 22, -50, 0 }
   #define ABL_ENABLE
 #endif
-#if ENABLED(CR10_VOLCANO) || ENABLED(TORNADO_VOLCANO)
+#if ENABLED(CR10_VOLCANO)
   #define NOZZLE_TO_PROBE_OFFSET { 30, 12, 0 }
   #define ABL_ENABLE
 #endif
-#if ENABLED(CR10_V6HEAVYDUTY) || ENABLED(TORNADO_V6HEAVYDUTY)
+#if ENABLED(TORNADO_VOLCANO)
+  #define NOZZLE_TO_PROBE_OFFSET { 30, 12, 0 }
+  #define ABL_ENABLE
+#endif
+#if ENABLED(CR10_V6HEAVYDUTY)
+  #define NOZZLE_TO_PROBE_OFFSET { 63, 0, 0 }
+  #define ABL_ENABLE
+#endif
+#if ENABLED(TORNADO_V6HEAVYDUTY)
   #define NOZZLE_TO_PROBE_OFFSET { 63, 0, 0 }
   #define ABL_ENABLE
 #endif
@@ -221,7 +305,7 @@
   #define NOZZLE_TO_PROBE_OFFSET { -48, -2, 0 }
   #define ABL_ENABLE
 #endif
-#if ENABLED(ENDER4_OEM_LEFT)
+#if ENABLED(ENDER4_OEM)
   #define NOZZLE_TO_PROBE_OFFSET { -53, -19, 0 }
   #define ABL_ENABLE
 #endif
@@ -247,39 +331,44 @@
   #define LEVELED_SEGMENT_LENGTH 5.0
   
   #undef Z_PROBE_OFFSET_RANGE_MIN
-  #define Z_PROBE_OFFSET_RANGE_MIN    -5
+  #define Z_PROBE_OFFSET_RANGE_MIN    -10
   #undef Z_PROBE_OFFSET_RANGE_MAX
   #define Z_PROBE_OFFSET_RANGE_MAX     1
   
   #define Z_MIN_PROBE_REPEATABILITY_TEST
-  //#define Z_AFTER_PROBING              5 //Disabled for testing.
-  //#define Z_AFTER_HOMING               5 //Disabled. Makes setting offset harder.
+  #define Z_AFTER_HOMING               5
   #define Z_PROBE_LOW_POINT           -10
+  
   #if DISABLED(BLTOUCH)
     #define FIX_MOUNTED_PROBE
   #endif
-  #if ENABLED(SLOWER_PROBE_MOVES)
-    #define XY_PROBE_SPEED 8000
+  
+  #if ENABLED(SLOWER_PROBE_MOVES) || ENABLED(PROBING_STEPPERS_OFF)
+    #define XY_PROBE_SPEED (133*60)
   #else
     #if ENABLED(EZABL_SUPERFASTPROBE)
-      #define XY_PROBE_SPEED 16000
+      #define XY_PROBE_SPEED (266*60)
     #else
-      #define XY_PROBE_SPEED 12000
+      #define XY_PROBE_SPEED (200*60)
     #endif
   #endif
+  
   #define PROBING_MARGIN EZABL_PROBE_EDGE
+  
   #if ENABLED(FIX_MOUNTED_PROBE) && DISABLED(HEATERS_ON_DURING_PROBING)
     #define PROBING_HEATERS_OFF   
   #endif
+  
   #define MULTIPLE_PROBING 2
   #define AUTO_BED_LEVELING_BILINEAR
-  #define EXTRAPOLATE_BEYOND_GRID
+  #define ENABLE_LEVELING_FADE_HEIGHT
   #define GRID_MAX_POINTS_X EZABL_POINTS
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
   #define Z_SAFE_HOMING
+  
   #if ENABLED(Z_SAFE_HOMING)
-    #define Z_SAFE_HOMING_X_POINT ((X_BED_SIZE) / 2)    // X point for Z homing
-    #define Z_SAFE_HOMING_Y_POINT ((Y_BED_SIZE) / 2)    // Y point for Z homing
+    #define Z_SAFE_HOMING_X_POINT X_CENTER  // X point for Z homing
+    #define Z_SAFE_HOMING_Y_POINT Y_CENTER  // Y point for Z homing
   #endif
   
   // ABL Probe Logic Settings
@@ -312,7 +401,9 @@
 #if ENABLED(CUSTOM_PRINTER_NAME)
   #define CUSTOM_MACHINE_NAME USER_PRINTER_NAME
 #else
-  #if ENABLED(BLTOUCH)
+  #if ENABLED(EZBOARD_DIY)
+    #define CUSTOM_MACHINE_NAME "EZBoard DIY"
+  #elif ENABLED(BLTOUCH)
     #define CUSTOM_MACHINE_NAME "TH3D BLTouch"
   #elif ENABLED(ABL_ENABLE) && DISABLED(BLTOUCH)
     #define CUSTOM_MACHINE_NAME "TH3D EZABL"
@@ -355,30 +446,32 @@
 
 #if ENABLED(EZABL_SUPERFASTPROBE) && ENABLED(ABL_ENABLE) && DISABLED(BLTOUCH)
   #define HOMING_FEEDRATE_Z  (15*60)
-#elif ENABLED(EZABL_FASTPROBE) && ENABLED(ABL_ENABLE) && DISABLED(BLTOUCH)
+#elif ENABLED(EZABL_FASTPROBE) && ENABLED(ABL_ENABLE)
   #define HOMING_FEEDRATE_Z  (8*60)
 #else
-  #define HOMING_FEEDRATE_Z  (4*60)
+  #define HOMING_FEEDRATE_Z  (5*60)
 #endif
 
 #define Z_PROBE_SPEED_FAST HOMING_FEEDRATE_Z
-//#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
-#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST) 
 
 #if ENABLED(BLTOUCH)
   #define Z_CLEARANCE_DEPLOY_PROBE   6
   #define Z_CLEARANCE_BETWEEN_PROBES 5
   #define Z_CLEARANCE_MULTI_PROBE    6
+  #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST)
+  //#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
   #define ENDSTOPPULLUP_ZMIN
   #define ENDSTOPPULLUP_ZMIN_PROBE
-#elif ENABLED(EZABL_SUPERFASTPROBE) && ENABLED(ABL_ENABLE) && DISABLED(BLTOUCH)
-  #define Z_CLEARANCE_DEPLOY_PROBE   1
+#elif ENABLED(EZABL_SUPERFASTPROBE) && ENABLED(ABL_ENABLE)
+  #define Z_CLEARANCE_DEPLOY_PROBE   2
   #define Z_CLEARANCE_BETWEEN_PROBES 2
-  #define Z_CLEARANCE_MULTI_PROBE    1
+  #define Z_CLEARANCE_MULTI_PROBE    2
+  #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 1.5)
 #else
   #define Z_CLEARANCE_DEPLOY_PROBE   5
   #define Z_CLEARANCE_BETWEEN_PROBES 3
   #define Z_CLEARANCE_MULTI_PROBE    3
+  #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
 #endif
 
 #define HOST_KEEPALIVE_FEATURE
@@ -440,6 +533,10 @@
 #define DISABLE_E false
 #define DISABLE_INACTIVE_EXTRUDER
 
+#define ENDSTOP_NOISE_THRESHOLD 2
+
+#define SERVO_DELAY { 300 }
+
 /**
  * LCD General Settings
  */
@@ -448,7 +545,7 @@
 #define DISPLAY_CHARSET_HD44780 JAPANESE
 #define LCD_INFO_SCREEN_STYLE 0
 #define DISABLE_REDUCED_ACCURACY_WARNING
-#if DISABLED(DWIN_CREALITY_LCD)
+#if DISABLED(DWIN_CREALITY_LCD) && DISABLED(LCD2004) && DISABLED(TFT_COLOR_UI)
   #define SHOW_BOOTSCREEN
   #define SHOW_CUSTOM_BOOTSCREEN
 #endif

@@ -426,6 +426,32 @@
   #endif
 #endif
 
+#if ENABLED(MKS_SGENL_V2_HE1_FAN)
+  #ifdef E1_STEPS_MM
+    #if ENABLED(SINGLENOZZLE)
+      #define USE_CONTROLLER_FAN
+      #define CONTROLLER_FAN_PIN       P2_06
+      #define CONTROLLERFAN_IDLE_TIME     60
+      #define CONTROLLERFAN_SPEED_MIN      0
+      #define CONTROLLERFAN_SPEED_ACTIVE 255
+      #define CONTROLLER_FAN_EDITABLE
+      #if ENABLED(CONTROLLER_FAN_EDITABLE)
+        #define CONTROLLER_FAN_MENU
+      #endif
+    #endif
+  #else
+  #define USE_CONTROLLER_FAN
+  #define CONTROLLER_FAN_PIN       P2_06
+  #define CONTROLLERFAN_IDLE_TIME     60
+  #define CONTROLLERFAN_SPEED_MIN      0
+  #define CONTROLLERFAN_SPEED_ACTIVE 255
+  #define CONTROLLER_FAN_EDITABLE
+  #if ENABLED(CONTROLLER_FAN_EDITABLE)
+    #define CONTROLLER_FAN_MENU
+    #endif
+  #endif
+#endif
+
 #if ENABLED(EZ300_OEM_MOUNT) && ENABLED(ARTILLERY_AL4)
   #define USE_CONTROLLER_FAN
   #define CONTROLLER_FAN_PIN           5
@@ -502,8 +528,12 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#if ENABLED(SIDEWINDER_X1) || (ENABLED(EZ300_OEM_MOUNT) && ENABLED(ARTILLERY_AL4))
+#if ENABLED(SIDEWINDER_X1) || (ENABLED(EZ300_OEM_MOUNT) && ENABLED(ARTILLERY_AL4)) || ENABLED(SUNLU_S8_SH_2560_BOARD)
   #define E0_AUTO_FAN_PIN 7
+#elif ENABLED(MKS_SGENL_V2_FAN2)
+  #define E0_AUTO_FAN_PIN P1_04
+#elif (ENABLED(WANHAO_I3MINI) || ENABLED(WANHAO_I3MINI_V2)) && ENABLED(WANHAO_I3MINI_E0_FAN)
+  #define E0_AUTO_FAN_PIN 12
 #else
   #define E0_AUTO_FAN_PIN -1
 #endif
@@ -718,7 +748,7 @@
 
   // Safety: The probe needs time to recognize the command.
   //         Minimum command delay (ms). Enable and increase if needed.
-  //#define BLTOUCH_DELAY 500
+  #define BLTOUCH_DELAY 500
 
   /**
    * Settings for BLTOUCH Classic 1.2, 1.3 or BLTouch Smart 1.0, 2.0, 2.2, 3.0, 3.1, and most clones:
@@ -1112,7 +1142,7 @@
 
   // Add Probe Z Offset calibration to the Z Probe Offsets menu
   #if HAS_BED_PROBE
-    #define PROBE_OFFSET_WIZARD
+    //#define PROBE_OFFSET_WIZARD
     #if ENABLED(PROBE_OFFSET_WIZARD)
       #define PROBE_OFFSET_START -5.0   // Estimated nozzle-to-probe Z offset, plus a little extra
     #endif
@@ -1199,7 +1229,9 @@
   #endif
 
   #if EITHER(HAS_MARLINUI_HD44780, IS_TFTGLCD_PANEL)
-    //#define LCD_PROGRESS_BAR            // Show a progress bar on HD44780 LCDs for SD printing
+    #if ENABLED(LCD2004)
+      #define LCD_PROGRESS_BAR            // Show a progress bar on HD44780 LCDs for SD printing
+    #endif
     #if ENABLED(LCD_PROGRESS_BAR)
       #define PROGRESS_BAR_BAR_TIME 2000  // (ms) Amount of time to show the bar
       #define PROGRESS_BAR_MSG_TIME 3000  // (ms) Amount of time to show the status message
@@ -1394,7 +1426,9 @@
    *
    * :[ 'LCD', 'ONBOARD', 'CUSTOM_CABLE' ]
    */
-  //#define SDCARD_CONNECTION LCD
+  #ifndef SDCARD_CONNECTION
+    #define SDCARD_CONNECTION ONBOARD
+  #endif
 
 #endif // SDSUPPORT
 
@@ -1668,9 +1702,9 @@
  */
 #define BABYSTEPPING
 #if ENABLED(BABYSTEPPING)
-  //#define INTEGRATED_BABYSTEPPING         // EXPERIMENTAL integration of babystepping into the Stepper ISR
-  //#define BABYSTEP_WITHOUT_HOMING
-  //#define BABYSTEP_ALWAYS_AVAILABLE       // Allow babystepping at all times (not just during movement).
+  #define INTEGRATED_BABYSTEPPING           // EXPERIMENTAL integration of babystepping into the Stepper ISR - Enabling fixes Z Stalling on some TMC drivers
+  #define BABYSTEP_WITHOUT_HOMING
+  #define BABYSTEP_ALWAYS_AVAILABLE         // Allow babystepping at all times (not just during movement).
   //#define BABYSTEP_XY                     // Also enable X/Y Babystepping. Not supported on DELTA!
   #define BABYSTEP_INVERT_Z false           // Change if Z babysteps should go the other way
   #define BABYSTEP_MILLIMETER_UNITS         // Specify BABYSTEP_MULTIPLICATOR_(XY|Z) in mm instead of micro-steps
@@ -1702,7 +1736,9 @@
     #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
       #if DISABLED(SPACE_SAVER) && DISABLED(DWIN_CREALITY_LCD)
         //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
-        #define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
+        #if DISABLED(LCD2004)
+          #define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
+        #endif
       #endif
     #endif
   #endif
@@ -1869,7 +1905,9 @@
 //
 // G2/G3 Arc Support
 //
-//#define ARC_SUPPORT                 // Disable this feature to save ~3226 bytes
+#if DISABLED(DISABLE_ARC_SUPPORT)
+  #define ARC_SUPPORT                 // Disable this feature to save ~3226 bytes
+#endif
 #if ENABLED(ARC_SUPPORT)
   #define MM_PER_ARC_SEGMENT      1 // (mm) Length (or minimum length) of each arc segment
   //#define ARC_SEGMENTS_PER_R    1 // Max segment length, MM_PER = Min
@@ -2351,9 +2389,13 @@
   #define HOLD_MULTIPLIER    0.5  // Scales down the holding current from run current
   #define INTERPOLATE       true  // Interpolate X/Y/Z_MICROSTEPS to 256
 
-  #if ENABLED(EZBOARD) || ENABLED(SKR_E3_MINI_BOARD)
+  #if ENABLED(EZBOARD) || ENABLED(SKR_E3_MINI_BOARD) || ENABLED(DIY_TMCBOARD)
     #if AXIS_IS_TMC(X)
-      #define X_CURRENT       600        // (mA) RMS current. Multiply by 1.414 for peak current.
+      #if X_MOTOR_CURRENT > 0
+        #define X_CURRENT X_MOTOR_CURRENT
+      #else  
+        #define X_CURRENT       600        // (mA) RMS current. Multiply by 1.414 for peak current.
+      #endif
       #define X_CURRENT_HOME  X_CURRENT  // (mA) RMS current for sensorless homing
       #define X_MICROSTEPS     16    // 0..256
       #define X_RSENSE          0.11
@@ -2377,12 +2419,14 @@
     #define X2_CHAIN_POS     -1
   #endif
 
-  #if ENABLED(EZBOARD) || ENABLED(SKR_E3_MINI_BOARD)
+  #if ENABLED(EZBOARD) || ENABLED(SKR_E3_MINI_BOARD) || ENABLED(DIY_TMCBOARD)
     #if AXIS_IS_TMC(Y)
       #if ENABLED(CR10_S5) || ENABLED(CR10S_S5)
         #define Y_CURRENT   800
       #elif ENABLED(CR10_S4) || ENABLED(CR10S_S4)
         #define Y_CURRENT   700
+      #elif Y_MOTOR_CURRENT > 0
+        #define Y_CURRENT Y_MOTOR_CURRENT
       #else
         #define Y_CURRENT   600
       #endif
@@ -2410,10 +2454,12 @@
     #define Y2_CHAIN_POS     -1
   #endif
 
-  #if ENABLED(EZBOARD) || ENABLED(SKR_E3_MINI_BOARD)
+  #if ENABLED(EZBOARD) || ENABLED(SKR_E3_MINI_BOARD) || ENABLED(DIY_TMCBOARD)
     #if AXIS_IS_TMC(Z)
       #if ENABLED(DUAL_Z_MOTORS)
         #define Z_CURRENT     1000
+      #elif Z_MOTOR_CURRENT > 0
+        #define Z_CURRENT Z_MOTOR_CURRENT
       #else
         #define Z_CURRENT     700
       #endif
@@ -2463,9 +2509,11 @@
     #define Z4_CHAIN_POS     -1
   #endif
 
-  #if AXIS_IS_TMC(E0) || ENABLED(SKR_E3_MINI_BOARD)
+  #if AXIS_IS_TMC(E0) || ENABLED(SKR_E3_MINI_BOARD) || ENABLED(DIY_TMCBOARD)
     #if ENABLED(PANCAKE_STEPPER)
       #define E0_CURRENT    600
+    #elif E0_MOTOR_CURRENT > 0
+      #define E0_CURRENT E0_MOTOR_CURRENT
     #else
       #define E0_CURRENT    800
     #endif
@@ -2475,8 +2523,14 @@
     #define E0_CHAIN_POS     -1
   #endif
 
-  #if AXIS_IS_TMC(E1)
-    #define E1_CURRENT      800
+  #if AXIS_IS_TMC(E1) || ENABLED(DIY_TMCBOARD)
+    #if ENABLED(PANCAKE_STEPPER)
+      #define E1_CURRENT    600
+    #elif E0_MOTOR_CURRENT > 0
+      #define E1_CURRENT E1_MOTOR_CURRENT
+    #else
+      #define E1_CURRENT    800
+    #endif
     #define E1_MICROSTEPS    16
     #define E1_RSENSE         0.11
     #define E1_CHAIN_POS     -1
@@ -2615,8 +2669,12 @@
    * Use Trinamic's ultra quiet stepping mode.
    * When disabled, Marlin will use spreadCycle stepping mode.
    */
-  #define STEALTHCHOP_XY
-  #define STEALTHCHOP_Z
+  #if DISABLED(XY_SPREADCYCLE)
+    #define STEALTHCHOP_XY
+  #endif
+  #if DISABLED(Z_SPREADCYCLE)
+    #define STEALTHCHOP_Z
+  #endif
   //#define STEALTHCHOP_E
 
   /**
