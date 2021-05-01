@@ -18,7 +18,7 @@
 //===========================================================================
 // *****************   CREALITY PRINTERS 2560 CPU BOARD   *******************
 //===========================================================================
-//#define CR10S
+#define CR10S
 //#define CR10S_MINI
 //#define CR10S_S4
 //#define CR10S_S5
@@ -56,7 +56,7 @@
 //#define TM3DAERO
 //#define TM3DAERO_EXTENDED
 //#define PETSFANG  //This is the RIGHT mounted version - if using the left mount please use the CUSTOM_PROBE option.
-//#define CUSTOM_PROBE
+#define CUSTOM_PROBE
 
 // Filament Sensor - EZOut Kits
 // If you are using our EZOut filament sensor kit on your machine uncomment the below line.
@@ -74,7 +74,7 @@
 
 // Creality 2560 Silent Board
 // If you are using the 2560 based "Silent" board with TMC drivers enable the below setting
-//#define CREALITY_SILENT_BOARD
+#define CREALITY_SILENT_BOARD
 
 // CR-10S Pro - If you are using the stock Creality ABL probe on the CR-10S Pro uncomment the below line
 //#define CR10S_PRO_STOCK_ABL
@@ -136,10 +136,10 @@
 //===========================================================================
 
 // Probing Grid Points - If you want more or less EZABL probe points change the number below, use odd numbers. Total points is # times #.
-#define EZABL_POINTS 3
+#define EZABL_POINTS 5
 
 // Probe Edge - How far from the edge of the bed to probe from. Use 50 if using binder clips. This also sets the edge inset value for MANUAL_MESH_LEVELING.
-#define EZABL_PROBE_EDGE 35
+#define EZABL_PROBE_EDGE 5
 
 // Fast Probing - Works with most machines and all EZABL sensors (8mm/s)
 #define EZABL_FASTPROBE
@@ -148,7 +148,7 @@
 //#define EZABL_SUPERFASTPROBE
 
 // Heaters on During Probing - Heaters will stay on during probing - May reduce accuracy do not use unless told to by support
-//#define HEATERS_ON_DURING_PROBING
+#define HEATERS_ON_DURING_PROBING
 
 // Probing Steppers Off - This will cycle the XYE stepper motors during probing to reduce interference from them. When using this do NOT touch the X or Y during probing as they will not be locked.
 //#define PROBING_STEPPERS_OFF
@@ -157,7 +157,7 @@
 //#define SLOWER_PROBE_MOVES
 
 // Grid Extrapolation - This will use the mesh data to make assumptions of the bed outside the probe area. Disable if you are getting incorrect results on the edges of the bed.
-#define EXTRAPOLATE_BEYOND_GRID
+//#define EXTRAPOLATE_BEYOND_GRID
 
 //================================================================================
 // CUSTOM PROBE SETTINGS - FOR EZABL OR BL TOUCH
@@ -194,7 +194,7 @@
   * If the probe is left of the nozzle the offset on X is NEGATIVE
   * If the probe is in front of the nozzle the offset on Y is NEGATIVE
   */
-  #define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
+  #define NOZZLE_TO_PROBE_OFFSET { -23, -25, 0 }
 #endif
 
 
@@ -211,13 +211,13 @@
 // If you need to reverse the e motor direction also enabled the REVERSE_E_MOTOR_DIRECTION option.
 // Example EStep Values: TH3D Aluminum Extruder - 95 ESteps, TH3D Tough Extruder - 410 ESteps, BMG Extruder - 415 ESteps
 // When installing a Tough Extruder or E3D Titan or Bondtech that is Geared you likely need to enable the REVERSE_E_MOTOR_DIRECTION option
-//#define CUSTOM_ESTEPS
-#define CUSTOM_ESTEPS_VALUE 410
-//#define REVERSE_E_MOTOR_DIRECTION
+#define CUSTOM_ESTEPS
+#define CUSTOM_ESTEPS_VALUE 415
+#define REVERSE_E_MOTOR_DIRECTION
 
 // FILAMENT SENSOR UNLOAD SETTINGS -----------------
 // If you have a filament sensor that is physically mounted to the machine you can enable MOUNTED_FILAMENT_SENSOR to set the unload length to 0 to prevent filament from backing up in the sensor by uncommenting MOUNTED_FILAMENT_SENSOR 
-//#define MOUNTED_FILAMENT_SENSOR
+#define MOUNTED_FILAMENT_SENSOR
 
 // If you have a direct drive machine with a filament sensor uncomment DIRECT_DRIVE_PRINTER to decrease the unload length from 100mm to 20mm
 //#define DIRECT_DRIVE_PRINTER
@@ -231,13 +231,13 @@
 //#define TH3D_HOTEND_THERMISTOR
 
 // If you are using a known hotend thermistor value uncomment the below 2 lines and enter the thermistor number replacing the X after the #define KNOWN_HOTEND_THERMISTOR_VALUE
-//#define KNOWN_HOTEND_THERMISTOR
-//#define KNOWN_HOTEND_THERMISTOR_VALUE X
+#define KNOWN_HOTEND_THERMISTOR
+#define KNOWN_HOTEND_THERMISTOR_VALUE 20
 
 // If you have a hotend and thermistor capable of over 290C you can set the max temp value below.
 // Setting this higher than 290C on a stock or traditional thermistor will damage it. Refer to your thermistor documentation to see what max temp is.
-//#define HIGH_TEMP_THERMISTOR
-#define HIGH_TEMP_THERMISTOR_TEMP 350
+#define HIGH_TEMP_THERMISTOR
+#define HIGH_TEMP_THERMISTOR_TEMP 300
 
 // BED THERMISTOR SETTINGS -------------------------
 
@@ -265,8 +265,8 @@
 //#define FAN_FIX
 
 // Use your own printer name - Uncomment both lines
-//#define CUSTOM_PRINTER_NAME
-//#define USER_PRINTER_NAME "CHANGE ME"
+#define CUSTOM_PRINTER_NAME
+#define USER_PRINTER_NAME "Imprimante"
 
 // If your printer is homing to the endstops hard uncomment this to change the homing speed/divisor to make it less aggressive.
 //#define SLOWER_HOMING
@@ -287,7 +287,7 @@
 // PID BED TEMPERATURE CONTROL ---------------------
 // If you want PID Bed Temperature control enable the below line. You will need to tune it for your machine.
 // See the PID Bed setup guide here: https://support.th3dstudio.com/hc/guides/diy-guides/p-i-d-bed-calibration-guide/
-//#define ENABLE_PIDBED
+#define ENABLE_PIDBED
 
 // Z PROBE OFFSET WIZARD ---------------------------
 // Marlin has a Z Probe Offset Wizard now. If you want to enable this, uncomment the below line.
@@ -302,13 +302,14 @@
 //#define LINEAR_ADVANCE
 // Change the K Value here or use M900 KX.XX in your starting code (recommended).
 #define LINEAR_ADVANCE_K 0
-
+#define ENABLE_LEVELING_FADE_HEIGHT
+#define SD_CHECK_AND_RETRY
 // BL TOUCH ----------------------------------------
 // If you want to use the BL-Touch uncomment the 2 lines below and set your servo pin.
 // You also need to uncomment #define CUSTOM_PROBE above and then enter in your offsets above in the CUSTOM PROBE section.
-//#define BLTOUCH
+#define BLTOUCH
 // Here is where you set your servo pin.
-//#define SERVO0_PIN 11
+#define SERVO0_PIN 11
 
 // MANUAL MESH LEVELING ----------------------------
 // If you want to use manual mesh leveling you can enable the below option. This is for generating a MANUAL mesh WITHOUT a probe. To change the mesh inset value change the EZABL_PROBE_EDGE setting above.
@@ -624,6 +625,7 @@
     #define Y_DRIVER_TYPE TMC2208_STANDALONE
     #define Z_DRIVER_TYPE TMC2208_STANDALONE
     #define E0_DRIVER_TYPE TMC2208_STANDALONE
+    #define Z2_DRIVER_TYPE TMC2208_STANDALONE
   #else
     #define X_DRIVER_TYPE A4988
     #define Y_DRIVER_TYPE A4988
@@ -710,9 +712,9 @@
       #define FIL_RUNOUT_STATE     LOW        // Pin state indicating that filament is NOT present.
     #endif
 
-    #define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
-    //#define FIL_RUNOUT_PULLDOWN           // Use internal pulldown for filament runout pins.
-
+    // #define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
+    #define FIL_RUNOUT_PULLDOWN           // Use internal pulldown for filament runout pins.
+	// #define FIL_RUNOUT_PIN 2
     // Set one or more commands to execute on filament runout.
     // (After 'M412 H' Marlin will ask the host to handle the process.)
     #define FILAMENT_RUNOUT_SCRIPT "M600"
