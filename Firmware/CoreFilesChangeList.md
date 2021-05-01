@@ -27,15 +27,22 @@ This does not include machine configs or PlatformIO files.
 			- **language**
 				- `language_en.h`
 		- **pins**
+			- `pins.h`
 			- **lpc1769**
+				- `pins_MKS_SGEN_L_V2.h`
 				- `pins_TH3D_EZBOARD.h`
+			- **mega**
+				- `pins_WANHAO_ONEPLUS.h`
 			- **ramps**
 				- `pins_RAMPS.h`
 				- `pins_RAMPS_CREALITY.h`
 			- **sanguino**
+				- `pins_ANET_10.h`
 				- `pins_MELZI_CREALITY.h`
 			- **stm32f1**
 				- `pins_BTT_SKR_MINI_E3_common.h`
 				- `pins_CREALITY_V4.h`
+				- `pins_MKS_ROBIN_MINI.h`
+				- `pins_MKS_ROBIN_NANO.h`
 	- `Configuration_adv.h`
 	- `Version.h`

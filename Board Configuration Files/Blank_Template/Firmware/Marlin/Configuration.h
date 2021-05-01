@@ -1,5 +1,8 @@
 /**
- * For directions on how to use this firmware visit http://uf2.th3dstudio.com
+ * For directions on how to use this firmware visit http://uf2.th3dstudio.com and click on your printer/board link
+ * NO IMPLIED SUPPORT OR WARRANTY IS PROVIDED WITH THIS FIRMWARE AND IS PROVIDED AS-IS
+ *
+ * MAKE SURE ALL SLICERS AND OTHER PROGRAMS THAT CONNECT TO YOUR PRINTER COM PORT ARE CLOSED BEFORE FLASHING.
  */
 #pragma once
 #define CONFIGURATION_H_VERSION 020007
@@ -9,6 +12,7 @@
 //===========================================================================
 
 // ONLY UNCOMMENT THINGS IN ONE PRINTER SECTION!!! IF YOU HAVE MULTIPLE MACHINES FLASH THEM ONE AT A TIME.
+// UNCOMMENT MEANS REMOVING THE // IN FRONT OF A #define XXXXXX LINE.
 
 //===========================================================================
 // **************************   BRAND PRINTERS    ***************************
@@ -28,34 +32,37 @@
 //===========================================================================
 
 //===========================================================================
-// EZABL Advanced Settings
+// EZABL Advanced Settings - EZABL_POINTS & EZABL_PROBE_EDGE are also used for other probes
 //===========================================================================
 
-// If you want more or less EZABL probe points change the number below (only used if EZABL enabled)
-// Default is 3 which gives you 3x3 grid for a total of 9 points. STICK WITH ODD NUMBERS
+// Probing Grid Points - If you want more or less EZABL probe points change the number below, use odd numbers. Total points is # times #.
 #define EZABL_POINTS 3
 
-// If you want to change how far in or out the probe senses change EZABL_PROBE_EDGE value below. This also sets the edge inset value for MANUAL_MESH_LEVELING.
-// Most Machines - 35
-// Binder Clips? - 50
+// Probe Edge - How far from the edge of the bed to probe from. Use 50 if using binder clips. This also sets the edge inset value for MANUAL_MESH_LEVELING.
 #define EZABL_PROBE_EDGE 35
 
-// If you have issues with your machine running the faster probe setting disable the #define EZABL_FASTPROBE below.
-// NOTE: Most machines will work with the fast probe enabled. Use M48 to verify accuracy.
+// Fast Probing - Works with most machines and all EZABL sensors (8mm/s)
 #define EZABL_FASTPROBE
 
-// Superfast probing - Only works with the EZABL Pro Sensors
+// Superfast Probing - Only works with the EZABL Pro Sensors (15mm/s)
 //#define EZABL_SUPERFASTPROBE
 
-// Heaters will stay on during probing - only use if directed to by support. Do not use on AC beds.
+// Heaters on During Probing - Heaters will stay on during probing - May reduce accuracy do not use unless told to by support
 //#define HEATERS_ON_DURING_PROBING
 
-// Does your machine make weird noises/vibrations when it is probing the mesh? Enable this to slow down the speed between probe points.
+// Probing Steppers Off - This will cycle the XYE stepper motors during probing to reduce interference from them. When using this do NOT touch the X or Y during probing as they will not be locked.
+//#define PROBING_STEPPERS_OFF
+
+// Slow Down Moves - Does your machine make weird noises/vibrations when it is probing the mesh? Enable this to slow down the speed between probe points.
 //#define SLOWER_PROBE_MOVES
 
+// Grid Extrapolation - This will use the mesh data to make assumptions of the bed outside the probe area. Disable if you are getting incorrect results on the edges of the bed.
+#define EXTRAPOLATE_BEYOND_GRID
+
 //================================================================================
-// IF YOU HAVE A CUSTOM PROBE MOUNT OR ONE THAT IS NOT PRE-SUPPORTED UNCOMMENT THE
-// CUSTOM_PROBE OPTION IN YOUR PRINTER SECTION AND ENTER YOUR PROBE LOCATION BELOW
+// CUSTOM PROBE SETTINGS - FOR EZABL OR BL TOUCH
+// If you have a probe mount that is not pre-setup in the firmware then uncomment
+// the CUSTOM_PROBE line above and enter your probe offsets below
 //================================================================================
 #if ENABLED(CUSTOM_PROBE)
   /**
@@ -102,10 +109,10 @@
 // If you want to change the Esteps for your printer you can uncomment the below line and set CUSTOM_ESTEPS_VALUE to what you want - USE WHOLE NUMBERS ONLY
 // This option sets the esteps from the CUSTOM_ESTEPS_VALUE line below.
 // If you need to reverse the e motor direction also enabled the REVERSE_E_MOTOR_DIRECTION option.
-// Example EStep Values: TH3D Aluminum Extruder - 95 ESteps, TH3D Tough Extruder - 463 ESteps, BMG Extruder - 415 ESteps
+// Example EStep Values: TH3D Aluminum Extruder - 95 ESteps, TH3D Tough Extruder - 410 ESteps, BMG Extruder - 415 ESteps
 // When installing a Tough Extruder or E3D Titan or Bondtech that is Geared you likely need to enable the REVERSE_E_MOTOR_DIRECTION option
 //#define CUSTOM_ESTEPS
-#define CUSTOM_ESTEPS_VALUE 463
+#define CUSTOM_ESTEPS_VALUE 410
 //#define REVERSE_E_MOTOR_DIRECTION
 
 // FILAMENT SENSOR UNLOAD SETTINGS -----------------
@@ -149,6 +156,11 @@
 
 // MISC --------------------------------------------
 
+// LCD Knob Direction
+// Turning your LCD knob clockwise should move DOWN in the menus/make values increase and counter-clockwise should move UP in the menus/make values decrease
+// If yours is behaving opposite then enable the REVERSE_KNOB_DIRECTION option below
+//#define REVERSE_KNOB_DIRECTION
+
 // If you have a 5015 fan that whines when under 100% speed uncomment the below line.
 //#define FAN_FIX
 
@@ -171,6 +183,19 @@
 //#define HOME_ADJUST
 #define X_HOME_LOCATION -10
 #define Y_HOME_LOCATION -10
+
+// PID BED TEMPERATURE CONTROL ---------------------
+// If you want PID Bed Temperature control enable the below line. You will need to tune it for your machine.
+// See the PID Bed setup guide here: https://support.th3dstudio.com/hc/guides/diy-guides/p-i-d-bed-calibration-guide/
+//#define ENABLE_PIDBED
+
+// Z PROBE OFFSET WIZARD ---------------------------
+// Marlin has a Z Probe Offset Wizard now. If you want to enable this, uncomment the below line.
+//#define PROBE_OFFSET_WIZARD
+
+// FINE BABYSTEPPING -------------------------------
+// Enabling the below line will set the babystep resolution from 0.025mm to 0.010mm for finer control.
+//#define FINE_BABYSTEPPING
 
 // LINEAR ADVANCE ----------------------------------
 // See here on how to use Linear Advance: http://marlinfw.org/docs/features/lin_advance.html
@@ -198,6 +223,11 @@
 // NOTE: This feature causes excessive wear on your SD card.
 //#define POWER_LOSS_RECOVERY
 
+// ARC Support Override ----------------------------
+// Arc support is enabled by default on all builds but this takes up extra space. If you get compile errors due to the size being too large when enabling other options, then disable ARC_SUPPORT
+// by uncommenting the DISABLE_ARC_SUPPORT line below.
+//#define DISABLE_ARC_SUPPORT
+
 //===========================================================================
 // **********************  END CONFIGURATION SETTINGS   *********************
 //===========================================================================
@@ -218,6 +248,10 @@
   #define BAUDRATE 115200
   
   #define DISPLAY_TYPE
+  
+  #if ENABLED(REVERSE_KNOB_DIRECTION)
+    #define REVERSE_ENCODER_DIRECTION
+  #endif
 
   #ifndef MOTHERBOARD
     #define MOTHERBOARD BOARD_PRINTER_BOARD

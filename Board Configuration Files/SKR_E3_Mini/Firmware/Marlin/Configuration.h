@@ -1,5 +1,6 @@
 /**
- * For directions on how to use this firmware visit http://uf2.th3dstudio.com
+ * For directions on how to use this firmware visit http://uf2.th3dstudio.com and click on your printer/board link
+ * NO IMPLIED SUPPORT OR WARRANTY IS PROVIDED WITH THIS FIRMWARE AND IS PROVIDED AS-IS
  */
 #pragma once
 #define CONFIGURATION_H_VERSION 020007
@@ -9,10 +10,11 @@
 //===========================================================================
 
 // ONLY UNCOMMENT THINGS IN ONE PRINTER SECTION!!! IF YOU HAVE MULTIPLE MACHINES FLASH THEM ONE AT A TIME.
+// UNCOMMENT MEANS REMOVING THE // IN FRONT OF A #define XXXXXX LINE.
 
 // THE BOARD THIS FIRMWARE IS FOR IS A 3RD PARTY/AFTERMARKET/UPGRADE BOARD NOT STANDARD ON THESE MACHINES.
 // THIS FIRMWARE IS PROVIDED AS-IS AND NOT COVERED UNDER ANY TECHNICAL SUPPORT PROVIDED FOR TH3D PRODUCTS. 
-// CONTACT BIGTREETECH SUPPORT IF YOU REQUIRE SUPPORT ON THEIR PRODUCT OR YOU CAN POST IN OUR FORUM.
+// CONTACT BIGTREETECH SUPPORT IF YOU REQUIRE SUPPORT ON THEIR PRODUCT OR YOU CAN POST IN OUR COMMUNITIES.
 // YOU MUST UNCOMMENT THE PRINTER LINE AND YOUR BOARD VERSION LINE TO COMPILE.
 
 //===========================================================================
@@ -20,7 +22,16 @@
 //===========================================================================
 
 //#define ENDER3_SKR_E3_MINI
+//#define ENDER3_MAX_SKR_E3_MINI
 //#define ENDER5_SKR_E3_MINI
+
+//#define CR10_SKR_E3_MINI
+//#define CR10MINI_SKR_E3_MINI
+//#define CR10S4_SKR_E3_MINI
+//#define CR10S5_SKR_E3_MINI
+// NOTE: It is HIGHLY recommended to use an external bed MOSFET with the CR-10 series machines due to the high load the beds have.
+// While these boards work on 12V machines, they are designed for 24V printers that pull less current (specifically on the bed).
+// If you need a MOSFET, we carry one here: https://www.th3dstudio.com/product/high-amp-12v-24v-mosfet-heated-bed-or-hotend/
 
 // Uncomment what SKR E3 Mini Board Version you are using
 //#define SKR_E3_MINI_V1
@@ -32,10 +43,17 @@
 // If you bought just the sensor from us and not the kit with the adapter PCB you will need to swap the red an white wires at one end of the plug to use it with these boards.
 // Failure to use our sensor with the EZOut adapter PCB OR without swapping the red and white wires will result in a short to ground.
 // Connect the EZOut sensor kit (or sensor only with wiring changed as per above) to the "E-Stop" port and uncomment the below line to enable the filament sensor.
+// Also works with the stock Ender 3 MAX sensor.
 //#define EZOUTV2_ENABLE
 
+// Creality CR-10S Series Filament Sensor
+// Connect the stock sensor to the "E-Stop" port and uncomment the below line to enable the filament sensor.
+//#define CR10S_STOCKFILAMENTSENSOR
+
 // EZABL Probe Mounts
+//#degine CR10_OEM
 //#define ENDER3_OEM
+//#define ENDER3_MAX_OEM
 //#define ENDER5_OEM
 //#define CUSTOM_PROBE
 
@@ -62,34 +80,37 @@
 //===========================================================================
 
 //===========================================================================
-// EZABL Advanced Settings
+// EZABL Advanced Settings - EZABL_POINTS & EZABL_PROBE_EDGE are also used for other probes
 //===========================================================================
 
-// If you want more or less EZABL probe points change the number below (only used if EZABL enabled)
-// Default is 3 which gives you 3x3 grid for a total of 9 points. STICK WITH ODD NUMBERS
+// Probing Grid Points - If you want more or less EZABL probe points change the number below, use odd numbers. Total points is # times #.
 #define EZABL_POINTS 3
 
-// If you want to change how far in or out the probe senses change EZABL_PROBE_EDGE value below. This also sets the edge inset value for MANUAL_MESH_LEVELING.
-// Most Machines - 35
-// Binder Clips? - 50
+// Probe Edge - How far from the edge of the bed to probe from. Use 50 if using binder clips. This also sets the edge inset value for MANUAL_MESH_LEVELING.
 #define EZABL_PROBE_EDGE 35
 
-// If you have issues with your machine running the faster probe setting disable the #define EZABL_FASTPROBE below.
-// NOTE: Most machines will work with the fast probe enabled. Use M48 to verify accuracy.
+// Fast Probing - Works with most machines and all EZABL sensors (8mm/s)
 #define EZABL_FASTPROBE
 
-// Superfast probing - Only works with the EZABL Pro Sensors
+// Superfast Probing - Only works with the EZABL Pro Sensors (15mm/s)
 //#define EZABL_SUPERFASTPROBE
 
-// Heaters will stay on during probing - only use if directed to by support. Do not use on AC beds.
+// Heaters on During Probing - Heaters will stay on during probing - May reduce accuracy do not use unless told to by support
 //#define HEATERS_ON_DURING_PROBING
 
-// Does your machine make weird noises/vibrations when it is probing the mesh? Enable this to slow down the speed between probe points.
+// Probing Steppers Off - This will cycle the XYE stepper motors during probing to reduce interference from them. When using this do NOT touch the X or Y during probing as they will not be locked.
+//#define PROBING_STEPPERS_OFF
+
+// Slow Down Moves - Does your machine make weird noises/vibrations when it is probing the mesh? Enable this to slow down the speed between probe points.
 //#define SLOWER_PROBE_MOVES
 
+// Grid Extrapolation - This will use the mesh data to make assumptions of the bed outside the probe area. Disable if you are getting incorrect results on the edges of the bed.
+#define EXTRAPOLATE_BEYOND_GRID
+
 //================================================================================
-// IF YOU HAVE A CUSTOM PROBE MOUNT OR ONE THAT IS NOT PRE-SUPPORTED UNCOMMENT THE
-// CUSTOM_PROBE OPTION IN YOUR PRINTER SECTION AND ENTER YOUR PROBE LOCATION BELOW
+// CUSTOM PROBE SETTINGS - FOR EZABL OR BL TOUCH
+// If you have a probe mount that is not pre-setup in the firmware then uncomment
+// the CUSTOM_PROBE line above and enter your probe offsets below
 //================================================================================
 #if ENABLED(CUSTOM_PROBE)
   /**
@@ -136,10 +157,10 @@
 // If you want to change the Esteps for your printer you can uncomment the below line and set CUSTOM_ESTEPS_VALUE to what you want - USE WHOLE NUMBERS ONLY
 // This option sets the esteps from the CUSTOM_ESTEPS_VALUE line below.
 // If you need to reverse the e motor direction also enabled the REVERSE_E_MOTOR_DIRECTION option.
-// Example EStep Values: TH3D Aluminum Extruder - 95 ESteps, TH3D Tough Extruder - 463 ESteps, BMG Extruder - 415 ESteps
+// Example EStep Values: TH3D Aluminum Extruder - 95 ESteps, TH3D Tough Extruder - 410 ESteps, BMG Extruder - 415 ESteps
 // When installing a Tough Extruder or E3D Titan or Bondtech that is Geared you likely need to enable the REVERSE_E_MOTOR_DIRECTION option
 //#define CUSTOM_ESTEPS
-#define CUSTOM_ESTEPS_VALUE 463
+#define CUSTOM_ESTEPS_VALUE 410
 //#define REVERSE_E_MOTOR_DIRECTION
 
 // FILAMENT SENSOR UNLOAD SETTINGS -----------------
@@ -183,6 +204,11 @@
 
 // MISC --------------------------------------------
 
+// LCD Knob Direction
+// Turning your LCD knob clockwise should move DOWN in the menus/make values increase and counter-clockwise should move UP in the menus/make values decrease
+// If yours is behaving opposite then enable the REVERSE_KNOB_DIRECTION option below
+//#define REVERSE_KNOB_DIRECTION
+
 // If you have a 5015 fan that whines when under 100% speed uncomment the below line.
 //#define FAN_FIX
 
@@ -209,6 +235,19 @@
 //#define HOME_ADJUST
 #define X_HOME_LOCATION -10
 #define Y_HOME_LOCATION -10
+
+// PID BED TEMPERATURE CONTROL ---------------------
+// If you want PID Bed Temperature control enable the below line. You will need to tune it for your machine.
+// See the PID Bed setup guide here: https://support.th3dstudio.com/hc/guides/diy-guides/p-i-d-bed-calibration-guide/
+//#define ENABLE_PIDBED
+
+// Z PROBE OFFSET WIZARD ---------------------------
+// Marlin has a Z Probe Offset Wizard now. If you want to enable this, uncomment the below line.
+//#define PROBE_OFFSET_WIZARD
+
+// FINE BABYSTEPPING -------------------------------
+// Enabling the below line will set the babystep resolution from 0.025mm to 0.010mm for finer control.
+//#define FINE_BABYSTEPPING
 
 // LINEAR ADVANCE ----------------------------------
 // See here on how to use Linear Advance: http://marlinfw.org/docs/features/lin_advance.html
@@ -237,6 +276,13 @@
 // NOTE: This feature causes excessive wear on your SD card.
 //#define POWER_LOSS_RECOVERY
 
+// ARC Support Override ----------------------------
+// Arc support is enabled by default on all builds but this takes up extra space. If you get compile errors due to the size being too large when enabling other options, then disable ARC_SUPPORT
+// by uncommenting the DISABLE_ARC_SUPPORT line below.
+// Disabling ARC_SUPPORT will restore additional menus to the LCD on this board.
+// Because of the low end, limited memory chip BTT uses you cannot have both enabled at the same time.
+//#define DISABLE_ARC_SUPPORT
+
 //===========================================================================
 // **********************  END CONFIGURATION SETTINGS   *********************
 //===========================================================================
@@ -249,9 +295,17 @@
 /**
  * Machine Configuration Settings
  */
+
+/**
+ * BTT SKR E3 Mini Sanity Checks
+ */
+
+#if DISABLED(DISABLE_ARC_SUPPORT)
+  #define SPACE_SAVER //with ARC_SUPPORT enabled we need to slim down menus to save space.
+#endif
  
- //Ender 3/5 SKR E3 Mini Board Settings
-#if ENABLED(ENDER3_SKR_E3_MINI) || ENABLED(ENDER5_SKR_E3_MINI)
+ //Creality SKR E3 Mini Board Settings
+#if ENABLED(ENDER3_SKR_E3_MINI) || ENABLED(ENDER3_MAX_SKR_E3_MINI) || ENABLED(ENDER5_SKR_E3_MINI) || ENABLED(CR10_SKR_E3_MINI) || ENABLED(CR10MINI_SKR_E3_MINI) || ENABLED(CR10S4_SKR_E3_MINI) || ENABLED(CR10S5_SKR_E3_MINI)
   #define SERIAL_PORT -1
   #define SERIAL_PORT_2 2
   #define SKR_E3_MINI_BOARD
@@ -263,6 +317,10 @@
   #endif
   
   #define CR10_STOCKDISPLAY
+  
+  #if ENABLED(REVERSE_KNOB_DIRECTION)
+    #define REVERSE_ENCODER_DIRECTION
+  #endif
   
   #if ENABLED(SKR_E3_MINI_V1)
     #ifndef MOTHERBOARD
@@ -301,8 +359,13 @@
 
   #define CLASSIC_JERK
   #if ENABLED(CLASSIC_JERK)
+    #if ENABLED(CR10S4_SKR_E3_MINI) || ENABLED(CR10S5_SKR_E3_MINI)
+      #define DEFAULT_XJERK                 5.0
+      #define DEFAULT_YJERK                 5.0
+    #else
     #define DEFAULT_XJERK  7.0
     #define DEFAULT_YJERK  7.0
+    #endif
     #define DEFAULT_ZJERK  0.3
   #endif
 
@@ -316,7 +379,9 @@
     #define X_BED_SIZE 220
     #define Y_BED_SIZE 220
     #define Z_MAX_POS 300
-  #else
+  #endif
+  
+  #if ENABLED(ENDER3_SKR_E3_MINI)
     #if ENABLED(ENDER_XTENDER_400)
       #define X_BED_SIZE 400
       #define Y_BED_SIZE 400
@@ -338,6 +403,47 @@
       #define Y_BED_SIZE 235
       #define Z_MAX_POS 250
     #endif
+  #endif
+  
+  #if ENABLED(ENDER3_MAX_SKR_E3_MINI)
+    #define X_BED_SIZE 300
+    #define Y_BED_SIZE 300
+    #define Z_MAX_POS 340
+  #endif
+  
+  #if ENABLED(CR10_SKR_E3_MINI)
+    #define DUAL_Z_MOTORS
+    #define X_BED_SIZE 300
+    #define Y_BED_SIZE 300
+    #define Z_MAX_POS 400
+    #define PRINTER_VOLTAGE_12
+  #endif
+
+  #if ENABLED(CR10MINI_SKR_E3_MINI)
+    #define X_BED_SIZE 300
+    #define Y_BED_SIZE 220
+    #define Z_MAX_POS 300
+    #define PRINTER_VOLTAGE_12
+  #endif
+
+  #if ENABLED(CR10S4_SKR_E3_MINI)
+    #define DUAL_Z_MOTORS
+    #define CR10_S4
+    #define X_BED_SIZE 400
+    #define Y_BED_SIZE 400
+    #define Z_MAX_POS 400
+    #define PRINTER_VOLTAGE_12
+    #define SLOWER_PROBE_MOVES
+  #endif
+
+  #if ENABLED(CR10S5_SKR_E3_MINI)
+    #define DUAL_Z_MOTORS
+    #define CR10_S5
+    #define X_BED_SIZE 500
+    #define Y_BED_SIZE 500
+    #define Z_MAX_POS 500
+    #define PRINTER_VOLTAGE_12
+    #define SLOWER_PROBE_MOVES
   #endif
   
   #if ENABLED(HOME_ADJUST)
@@ -467,22 +573,39 @@
   #define Z_PROBE_OFFSET_RANGE_MIN -10
   #define Z_PROBE_OFFSET_RANGE_MAX 10
 
-  #if ENABLED(CUSTOM_PROBE) || ENABLED(ENDER5_OEM) || ENABLED(ENDER3_OEM)
-    #define ABL_ENABLE
-  #endif
-
-  #if ENABLED(ABL_ENABLE) || ENABLED(POWER_LOSS_RECOVERY)
+  #if ENABLED(CUSTOM_PROBE) || ENABLED(ENDER5_OEM) || ENABLED(ENDER3_OEM) || ENABLED(CR10_OEM) || ENABLED(ENDER3_MAX_OEM) || ENABLED(POWER_LOSS_RECOVERY)
     #define SPACE_SAVER
   #endif
 
-  #if ENABLED(EZOUTV2_ENABLE)
+  #if ENABLED(EZOUTV2_ENABLE) || ENABLED(CR10S_STOCKFILAMENTSENSOR)
     #define FILAMENT_RUNOUT_SENSOR
   #endif
   #if ENABLED(FILAMENT_RUNOUT_SENSOR)
-    #define FIL_RUNOUT_STATE LOW
-    #define NUM_RUNOUT_SENSORS   1
-    #define FIL_RUNOUT_PULLUP
+    #define FIL_RUNOUT_ENABLED_DEFAULT true // Enable the sensor on startup. Override with M412 followed by M500.
+    #define NUM_RUNOUT_SENSORS   1          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
+    #if ENABLED(EZOUTV2_ENABLE)
+      #define FIL_RUNOUT_STATE     LOW        // Pin state indicating that filament is NOT present.
+    #else
+      #define FIL_RUNOUT_STATE     HIGH        // Pin state indicating that filament is NOT present.
+    #endif
+    #define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
+    //#define FIL_RUNOUT_PULLDOWN           // Use internal pulldown for filament runout pins.
+
+    // Set one or more commands to execute on filament runout.
+    // (After 'M412 H' Marlin will ask the host to handle the process.)
     #define FILAMENT_RUNOUT_SCRIPT "M600"
+
+    // After a runout is detected, continue printing this length of filament
+    // before executing the runout script. Useful for a sensor at the end of
+    // a feed tube. Requires 4 bytes SRAM per sensor, plus 4 bytes overhead.
+    //#define FILAMENT_RUNOUT_DISTANCE_MM 25
+
+    #ifdef FILAMENT_RUNOUT_DISTANCE_MM
+      // Enable this option to use an encoder disc that toggles the runout pin
+      // as the filament moves. (Be sure to set FILAMENT_RUNOUT_DISTANCE_MM
+      // large enough to avoid false positives.)
+      //#define FILAMENT_MOTION_SENSOR
+    #endif
   #endif
 
 #else
